@@ -31,6 +31,9 @@ void CUtterance::CreateLabels(CFSAStringArray &Labels) const {
 
 	static const CFSWString context_signs = L"^-+=@_"; //5
 	for (INTPTR i = 2; i < pa.GetSize() - 2; i++) {
+		
+		if (pa[i - 1].phone == L"pau" && pa[i].phone == L"n" && pa[i + 1].phone == L"a" && pa[i + 2].phone == L"g") pa[i - 1].phone = L"u"; // fraasialguse 'nagu' välistamine
+	
 		CFSWString ws =
 			pa[i - 2].phone + context_signs[0] +
 			pa[i - 1].phone + context_signs[1] +
