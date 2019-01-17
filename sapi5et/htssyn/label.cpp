@@ -32,6 +32,7 @@ void CUtterance::CreateLabels(CFSAStringArray &Labels) const {
 	static const CFSWString context_signs = L"^-+=@_"; //5
 	for (INTPTR i = 2; i < pa.GetSize() - 2; i++) {
 		
+		// todo: eemalda rida, kui ", nagu" häälefailis korda saab
 		if (pa[i - 1].phone == L"pau" && pa[i].phone == L"n" && pa[i + 1].phone == L"a" && pa[i + 2].phone == L"g") pa[i - 1].phone = L"u"; // fraasialguse 'nagu' välistamine
 	
 		CFSWString ws =
