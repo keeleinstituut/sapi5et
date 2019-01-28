@@ -34,7 +34,18 @@ void CUtterance::CreateLabels(CFSAStringArray &Labels) const {
 		
 		// todo: eemalda rida, kui ", nagu" häälefailis korda saab
 		if (pa[i - 1].phone == L"pau" && pa[i].phone == L"n" && pa[i + 1].phone == L"a" && pa[i + 2].phone == L"g") pa[i - 1].phone = L"u"; // fraasialguse 'nagu' välistamine
-	
+		
+		if (pa[i].j1 == 1) { // üksikute ühesilbiliste sõnade prarameetrite hääldusparandused
+			pa[i].j1 = 2;
+			if (pa[i].phone != L"pau") {
+				pa[i].b5 = 2;
+				pa[i].b7 = 2;
+				pa[i].c3 = 2;
+				pa[i].e2 = 2;
+				pa[i].h1 = 2;
+			}
+		}
+		
 		CFSWString ws =
 			pa[i - 2].phone + context_signs[0] +
 			pa[i - 1].phone + context_signs[1] +

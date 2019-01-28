@@ -77,12 +77,12 @@ static CFSWString GetCharacterText(wchar_t ch) {
 	ch = FSToLower(ch);
 	switch (ch) {
 	case L'a': return L"aa";
-	case L'b': return L"bee";
-	case L'c': return L"tsee";
-	case L'd': return L"dee";
+	case L'b': return L"pee";
+	case L'c': return L"tse";
+	case L'd': return L"tee";
 	case L'e': return L"ee";
-	case L'f': return L"eff";
-	case L'g': return L"gee";
+	case L'f': return L"ef";
+	case L'g': return L"kee";
 	case L'h': return L"haa";
 	case L'i': return L"ii";
 	case L'j': return L"jott";
@@ -93,7 +93,7 @@ static CFSWString GetCharacterText(wchar_t ch) {
 	case L'o': return L"oo";
 	case L'p': return L"pee";
 	case L'q': return L"kuu";
-	case L'r': return L"err";
+	case L'r': return L"er";
 	case L's': return L"ess";
 	case L'š': return L"shaa";
 	case L'ž': return L"shee";
@@ -104,7 +104,7 @@ static CFSWString GetCharacterText(wchar_t ch) {
 	case L'õ': return L"õõ";
 	case L'ä': return L"ää";
 	case L'ö': return L"öö";
-	case L'ü': return L"üü";
+	case L'ü': return L"ü";
 	case L'x': return L"iks";
 	case L'y': return L"igrek";
 	case L'z': return L"tsett";
