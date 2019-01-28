@@ -323,10 +323,11 @@ STDMETHODIMP CSapi5Engine::Speak(DWORD dwFlags, REFGUID formatId, const WAVEFORM
 						ULONG ulWritten = 0;
 						hr = pOutputSite->Write(pAudioData, ipWrite, &ulWritten);
 						if (FAILED(hr)) return hr;
+						// ignoring ulWritten because of .NET 2 defect (?) of returning 0
 
-						pAudioData += ulWritten;
-						ipDataLeft -= ulWritten;
-						ullAudioOffset += ulWritten;
+						pAudioData += ipWrite;
+						ipDataLeft -= ipWrite;
+						ullAudioOffset += ipWrite;
 					}
 				} break;
 				case SPVA_Silence: {
@@ -354,8 +355,9 @@ STDMETHODIMP CSapi5Engine::Speak(DWORD dwFlags, REFGUID formatId, const WAVEFORM
 						ULONG ulWritten = 0;
 						HRESULT hr = pOutputSite->Write(Silence.GetData(), ipWrite, &ulWritten);
 						if (FAILED(hr)) return hr;
+						// ignoring ulWritten here as well (see above)
 
-						ullAudioOffset += ulWritten;
+						ullAudioOffset += ipWrite;
 					}
 				} break;
 				case SPVA_Bookmark: {
