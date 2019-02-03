@@ -418,17 +418,21 @@ void CSpeechEngine::CreateLabels(CFSClassArray<CFragment> &Sentence, CFSAStringA
 							wchar_t ch = pFragment->m_szText[ipChar];
 							CT CharType1 = GetCharType(ch);
 							if (CharType1 != CharType && szSubStr.GetLength()) {
-								CFSWString Alternative;
 								if (CharType == CT_NUMBER) {
-									Alternative = htssyn::int_to_words(szSubStr);
+									CFSWString szNumber = htssyn::int_to_words(szSubStr);
+									if (szNumber.GetLength()) AddAlternativeWords(Phrase, szNumber, pFragment);
 								}
 								else if (CharType == CT_LETTER) {
-									if (szSubStr.GetLength() == 1) {
-										Alternative = GetCharacterText(szSubStr[0]);
+									if (IsWord(szSubStr)) {
+										AddAlternativeWords(Phrase, szSubStr, pFragment);
 									}
-									if (!Alternative.GetLength()) Alternative = szSubStr;
+									else {
+										for (INTPTR ipChar = 0; ipChar < szSubStr.GetLength(); ipChar++) {
+											CFSWString szSpelling = GetCharacterText(szSubStr[ipChar]);
+											if (szSpelling.GetLength()) AddAlternativeWords(Phrase, szSpelling, pFragment);
+										}
+									}
 								}
-								if (Alternative.GetLength()) AddAlternativeWords(Phrase, Alternative, pFragment);
 								szSubStr.Empty();
 							}
 							CharType = CharType1;

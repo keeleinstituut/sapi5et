@@ -197,6 +197,10 @@ STDMETHODIMP CSapi5Engine::Speak(DWORD dwFlags, REFGUID formatId, const WAVEFORM
 				CFragment Fragment;
 				Fragment.m_eAction = SPVA_Bookmark;
 				Fragment.m_lParam = (LPARAM)pTextFrag->pTextStart;
+				if (Fragment.m_lParam) { // Clearly wrong, but MS version does it and clients depend on it
+					WCHAR *pEnd = ((LPWSTR)Fragment.m_lParam) + pTextFrag->ulTextLen;
+					if (*pEnd) *pEnd = 0;
+				}
 				Fragments.AddItem(Fragment);
 			} break;
 			case SPVA_Pronounce:
