@@ -17,19 +17,92 @@ static bool IsWord(const CFSWString &str) {
 	return bVowel;
 }
 
-enum CT { CT_NONE, CT_LETTER, CT_NUMBER, CT_OTHER };
+enum CT { CT_NONE, CT_SPACE, CT_LETTER, CT_NUMBER, CT_OTHER };
 static CT GetCharType(wchar_t ch) {
 	if (!ch) return CT_NONE;
+	if (ch == L' ') return CT_SPACE;
 	if (FSIsNumber(ch)) return CT_NUMBER;
 	if (FSIsLetter(ch)) return CT_LETTER;
 	return CT_OTHER;
+}
+
+static CFSWString GetNumberText(const CFSWString &szText, INTPTR maxSignificant = 36) {
+	CFSWString szNumber;
+	CFSWString szResult;
+
+	for (INTPTR ip = 0; ip < szText.GetLength(); ip++) {
+		if (FSIsNumber(szText[ip])) szNumber += szText[ip];
+	}
+	if (!szText.GetLength()) return szResult;
+	bool bOneByOne = (szText[0] == L'0');
+	if (!bOneByOne) {
+		INTPTR ipSignificant = 0;
+		for (INTPTR ip = szNumber.GetLength(); ip > 0; ip--) {
+			if (szNumber[ip - 1] != L'0') {
+				ipSignificant = ip;
+				break;
+			}
+		}
+		bOneByOne = (ipSignificant > maxSignificant);
+	}
+
+	static CFSWString OneNames[] = {
+		L"null", L"üks", L"kaks", L"kolm", L"neli", L"viis", L"kuus", L"seitse", L"kaheksa", L"üheksa"
+	};
+	static CFSWString TeenNames[] = {
+		L"kümme", L"üksteist", L"kaksteist", L"kolmteist", L"neliteist", L"viisteist", L"kuusteist", L"seitseteist", L"kaheksateist", L"üheksateist"
+	};
+	static CFSWString RankNames[] = {
+		L"", L"tuhat", L"miljon", L"biljon", L"triljon", L"kvadriljon", L"kvintiljon", L"sekstiljon", L"septiljon", L"oktiljon", L"noniljon", L"detsiljon"
+	};
+
+	if (bOneByOne) {
+		for (INTPTR ip = 0; ip < szNumber.GetLength(); ip++) {
+			szResult += OneNames[szNumber[ip] - L'0'] + L" ";
+		}
+	}
+	else {
+		INTPTR ipCursor = szNumber.GetLength();
+		for (INTPTR ipRank = 0; ipCursor > 0; ipRank++) {
+			int iOnes = szNumber[--ipCursor] - L'0';
+			int iTens = (ipCursor > 0 ? szNumber[--ipCursor] - L'0' : 0);
+			int iHundreds (ipCursor > 0 ? szNumber[--ipCursor] - L'0' : 0);
+
+			CFSWString szBlock;
+			if (iHundreds) {
+				szBlock += OneNames[iHundreds] + L"sada ";
+			}
+			if (iTens == 1) {
+				szBlock += TeenNames[iOnes] + L" ";
+				iOnes = 0;
+			}
+			else if (iTens > 1) {
+				szBlock += OneNames[iTens] + L"kümmend ";
+			}
+			if (iOnes) {
+				szBlock += OneNames[iOnes] + L" ";
+			}
+
+			if (ipRank > 0 && szBlock.GetLength()) {
+				CFSWString szRank = (ipRank < sizeof(RankNames) / sizeof(RankNames[0]) ? RankNames[ipRank] : L"midagiljon");
+				if (ipRank > 1 && (iHundreds > 0 || iTens > 0 || iOnes > 1)) szRank += L"it";
+				szBlock += szRank + L" ";
+			}
+
+			if (szBlock.GetLength()) {
+				szResult = szBlock + szResult;
+			}
+		}
+	}
+	szResult.Trim();
+	return szResult;
 }
 
 static CFSWString CountPunctuationText(INTPTR ipCount, const CFSWString &szText)
 {
 	CFSWString szCount;
 	szCount.Format(L"%ld", (long)ipCount);
-	return htssyn::int_to_words(szCount) + L" " + szText;
+	return GetNumberText(szCount) + L" " + szText;
 }
 
 static CFSWString GetPunctuationText(const CFSWString &szText, CFragment::FRAGMENTTYPE eNextType)
@@ -417,9 +490,10 @@ void CSpeechEngine::CreateLabels(CFSClassArray<CFragment> &Sentence, CFSAStringA
 						for (INTPTR ipChar = 0; ipChar <= pFragment->m_szText.GetLength(); ipChar++) {
 							wchar_t ch = pFragment->m_szText[ipChar];
 							CT CharType1 = GetCharType(ch);
+							if (CharType1 == CT_SPACE) CharType1 = CharType;
 							if (CharType1 != CharType && szSubStr.GetLength()) {
 								if (CharType == CT_NUMBER) {
-									CFSWString szNumber = htssyn::int_to_words(szSubStr);
+									CFSWString szNumber = GetNumberText(szSubStr, (szSubStr.GetLength() == pFragment->m_szText.GetLength() ? 9 : 3));
 									if (szNumber.GetLength()) AddAlternativeWords(Phrase, szNumber, pFragment);
 								}
 								else if (CharType == CT_LETTER) {

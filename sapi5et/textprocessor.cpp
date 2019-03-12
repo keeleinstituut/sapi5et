@@ -1,6 +1,15 @@
 #include "stdafx.h"
 #include "textprocessor.h"
 
+static bool ParseNumber(CFSWString szText, INTPTR &ipDigits) {
+	ipDigits = 0;
+	for (INTPTR ip = 0; ip < szText.GetLength(); ip++) {
+		if (!FSIsNumber(szText[ip])) return false;
+	}
+	ipDigits = szText.GetLength();
+	return true;
+}
+
 static bool TPIsWordChar(wchar_t Char) {
 	static const wchar_t *s_Additional = L"%\x2030\x2031\x00b0\x00ad";
 	// permil, pertho; degree; opthyph; 
@@ -91,16 +100,43 @@ void CTextProcessor::CombineFragments(CFSClassArray<CFragment> &Fragments) const
 
 	// Split all symbols
 	for (INTPTR ip = 0; ip < Fragments.GetSize(); ip++) {
-		if (Fragments[ip].m_eType == CFragment::TYPE_SYMBOL && Fragments[ip].m_szText.GetLength()>1) {
+		if (Fragments[ip].m_eType == CFragment::TYPE_SYMBOL && Fragments[ip].m_szText.GetLength() > 1) {
 			Fragments.InsertItem(ip + 1, CFragment(Fragments[ip].m_ipStartPos + 1, Fragments[ip].m_szText.Mid(1), CFragment::TYPE_SYMBOL));
 			Fragments[ip].m_szText = Fragments[ip].m_szText.Left(1);
 		}
 	}
 
-	// TODO: maybe?
 	// Combine numbers
+	for (INTPTR ip = 0; ip < Fragments.GetSize() - 2; ip++) {
+		INTPTR ipLen = 0;
+		if (ParseNumber(Fragments[ip].m_szText, ipLen)) {
+			bool bCombine = (ipLen <= 3);
+			INTPTR ipNumEnd = ip;
+			for (INTPTR ip2 = ip + 2; ip2 < Fragments.GetSize(); ip2 += 2) {
+				if (Fragments[ip2 - 1].m_eType == CFragment::TYPE_SPACE && Fragments[ip2 - 1].m_szText == L" " &&
+					ParseNumber(Fragments[ip2].m_szText, ipLen)) {
+					ipNumEnd = ip2;
+					if (ipLen != 3) bCombine = false;
+				}
+				else break;
+			}
+			if (ipNumEnd > ip) {
+				if (bCombine) {
+					while (ipNumEnd > ip) {
+						Fragments[ip].m_szText += Fragments[ip + 1].m_szText;
+						Fragments.RemoveItem(ip + 1);
+						ipNumEnd--;
+					}
+				}
+				else {
+					ip = ipNumEnd;
+				}
+			}
+		}
+	}
+
+	// TODO: maybe?
 	// Combine URLs
-	// ...
 }
 
 CFSWString CTextProcessor::GetCleanWord(const CFSWString &szText) const
