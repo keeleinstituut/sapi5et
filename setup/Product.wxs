@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
   <Product Id="F57AD98C-C3D4-4B87-B726-E035F8CAE46C" UpgradeCode="c309b8c3-2270-42a5-a8a2-a77c0cc51dc1"
-           Name="Eesti keele kõnesüntees (SAPI5)" Language="1033" Version="1.0.0.1" Manufacturer="EKI">
+           Name="Eesti keele kõnesüntees (SAPI5)" Language="1033" Version="1.1.0.2" Manufacturer="EKI">
     <Package InstallerVersion="300" Compressed="yes"  InstallScope="perMachine"/>
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
 
@@ -40,7 +40,7 @@
             </RegistryKey>
           </Component>
 
-          <Component Id="VoiceEva" Guid="7E2562FB-33CA-4e32-A447-6EC7BFBE36CF" Win64="no">
+          <Component Id="VoiceEva" Guid="7E2562FB-33CA-4E32-A447-6EC7BFBE36CF" Win64="no">
             <File Id="eva.htsvoice" Name="eva.htsvoice" DiskId="1" Source="../dct/eva.htsvoice" />
             <RegistryKey Action="createAndRemoveOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\Speech\Voices\Tokens\Eva - Estonian">
               <RegistryValue Action="write" Type="string" Value="Eva - Estonian" />
@@ -57,6 +57,52 @@
                 <RegistryValue Action="write" Type="string" Name="Gender" Value="Female" />
                 <RegistryValue Action="write" Type="string" Name="Age" Value="Adult" />
                 <RegistryValue Action="write" Type="string" Name="Name" Value="Eva" />
+                <RegistryValue Action="write" Type="string" Name="Vendor" Value="EKI" />
+                <RegistryValue Action="write" Type="string" Name="Version" Value="1.0" />
+              </RegistryKey>
+            </RegistryKey>
+          </Component>
+
+          <Component Id="VoiceLuukas" Guid="1370F7D1-125B-4E5D-85D1-57DA62CBC23F" Win64="no">
+            <File Id="luukas.htsvoice" Name="luukas.htsvoice" DiskId="1" Source="../dct/luukas.htsvoice" />
+            <RegistryKey Action="createAndRemoveOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\Speech\Voices\Tokens\Luukas - Estonian">
+              <RegistryValue Action="write" Type="string" Value="Luukas - Estonian" />
+              <RegistryValue Action="write" Type="string" Name="CLSID" Value="{8900F658-092B-4ADF-92EC-8CE13593F0E1}" />
+              <RegistryValue Action="write" Type="string" Name="425" Value="Luukas - Eesti" />
+              <RegistryValue Action="write" Type="string" Name="Language" Value="et-ee" />
+              <RegistryValue Action="write" Type="string" Name="VoiceFile" Value="luukas.htsvoice" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceSpeed" Value="110" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceHalfTone" Value="200" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceWeight1" Value="110" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceWeight2" Value="120" />
+              <RegistryKey Action="create" Key="Attributes">
+                <RegistryValue Action="write" Type="string" Name="Language" Value="425" />
+                <RegistryValue Action="write" Type="string" Name="Gender" Value="Male" />
+                <RegistryValue Action="write" Type="string" Name="Age" Value="Child" />
+                <RegistryValue Action="write" Type="string" Name="Name" Value="Luukas" />
+                <RegistryValue Action="write" Type="string" Name="Vendor" Value="EKI" />
+                <RegistryValue Action="write" Type="string" Name="Version" Value="1.0" />
+              </RegistryKey>
+            </RegistryKey>
+          </Component>
+
+          <Component Id="VoiceLee" Guid="27F76C05-D758-4C4D-9463-38639FEF730D" Win64="no">
+            <File Id="lee.htsvoice" Name="lee.htsvoice" DiskId="1" Source="../dct/lee.htsvoice" />
+            <RegistryKey Action="createAndRemoveOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\Speech\Voices\Tokens\Lee - Estonian">
+              <RegistryValue Action="write" Type="string" Value="Lee - Estonian" />
+              <RegistryValue Action="write" Type="string" Name="CLSID" Value="{8900F658-092B-4ADF-92EC-8CE13593F0E1}" />
+              <RegistryValue Action="write" Type="string" Name="425" Value="Lee - Eesti" />
+              <RegistryValue Action="write" Type="string" Name="Language" Value="et-ee" />
+              <RegistryValue Action="write" Type="string" Name="VoiceFile" Value="lee.htsvoice" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceSpeed" Value="110" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceHalfTone" Value="200" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceWeight1" Value="110" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceWeight2" Value="120" />
+              <RegistryKey Action="create" Key="Attributes">
+                <RegistryValue Action="write" Type="string" Name="Language" Value="425" />
+                <RegistryValue Action="write" Type="string" Name="Gender" Value="Female" />
+                <RegistryValue Action="write" Type="string" Name="Age" Value="Child" />
+                <RegistryValue Action="write" Type="string" Name="Name" Value="Lee" />
                 <RegistryValue Action="write" Type="string" Name="Vendor" Value="EKI" />
                 <RegistryValue Action="write" Type="string" Name="Version" Value="1.0" />
               </RegistryKey>
@@ -97,7 +143,7 @@
             </RegistryKey>
           </Component>
 
-          <Component Id="VoiceEva64" Guid="77150167-A5C2-480b-8129-5C5FE564CED5" Win64="yes">
+          <Component Id="VoiceEva64" Guid="77150167-A5C2-480B-8129-5C5FE564CED5" Win64="yes">
             <File Id="eva.htsvoice64" Name="eva.htsvoice" DiskId="1" Source="../dct/eva.htsvoice" />
             <RegistryKey Action="createAndRemoveOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\Speech\Voices\Tokens\Eva - Estonian">
               <RegistryValue Action="write" Type="string" Value="Eva - Estonian" />
@@ -119,6 +165,52 @@
               </RegistryKey>
             </RegistryKey>
           </Component>
+
+          <Component Id="VoiceLuukas64" Guid="C5504641-C36D-4E4A-8DFB-77641CFE5CCC" Win64="yes">
+            <File Id="luukas.htsvoice64" Name="luukas.htsvoice" DiskId="1" Source="../dct/luukas.htsvoice" />
+            <RegistryKey Action="createAndRemoveOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\Speech\Voices\Tokens\Luukas - Estonian">
+              <RegistryValue Action="write" Type="string" Value="Luukas - Estonian" />
+              <RegistryValue Action="write" Type="string" Name="CLSID" Value="{8900F658-092B-4ADF-92EC-8CE13593F0E1}" />
+              <RegistryValue Action="write" Type="string" Name="425" Value="Luukas - Eesti" />
+              <RegistryValue Action="write" Type="string" Name="Language" Value="et-ee" />
+              <RegistryValue Action="write" Type="string" Name="VoiceFile" Value="luukas.htsvoice" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceSpeed" Value="110" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceHalfTone" Value="200" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceWeight1" Value="110" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceWeight2" Value="120" />
+              <RegistryKey Action="create" Key="Attributes">
+                <RegistryValue Action="write" Type="string" Name="Language" Value="425" />
+                <RegistryValue Action="write" Type="string" Name="Gender" Value="Male" />
+                <RegistryValue Action="write" Type="string" Name="Age" Value="Child" />
+                <RegistryValue Action="write" Type="string" Name="Name" Value="Luukas" />
+                <RegistryValue Action="write" Type="string" Name="Vendor" Value="EKI" />
+                <RegistryValue Action="write" Type="string" Name="Version" Value="1.0" />
+              </RegistryKey>
+            </RegistryKey>
+          </Component>
+
+          <Component Id="VoiceLee64" Guid="4A6098DE-2BD9-4A6F-9315-25E557DF0D3D" Win64="yes">
+            <File Id="lee.htsvoice64" Name="lee.htsvoice" DiskId="1" Source="../dct/lee.htsvoice" />
+            <RegistryKey Action="createAndRemoveOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\Speech\Voices\Tokens\Lee - Estonian">
+              <RegistryValue Action="write" Type="string" Value="Lee - Estonian" />
+              <RegistryValue Action="write" Type="string" Name="CLSID" Value="{8900F658-092B-4ADF-92EC-8CE13593F0E1}" />
+              <RegistryValue Action="write" Type="string" Name="425" Value="Lee - Eesti" />
+              <RegistryValue Action="write" Type="string" Name="Language" Value="et-ee" />
+              <RegistryValue Action="write" Type="string" Name="VoiceFile" Value="lee.htsvoice" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceSpeed" Value="110" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceHalfTone" Value="200" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceWeight1" Value="110" />
+              <RegistryValue Action="write" Type="integer" Name="VoiceWeight2" Value="120" />
+              <RegistryKey Action="create" Key="Attributes">
+                <RegistryValue Action="write" Type="string" Name="Language" Value="425" />
+                <RegistryValue Action="write" Type="string" Name="Gender" Value="Female" />
+                <RegistryValue Action="write" Type="string" Name="Age" Value="Child" />
+                <RegistryValue Action="write" Type="string" Name="Name" Value="Lee" />
+                <RegistryValue Action="write" Type="string" Name="Vendor" Value="EKI" />
+                <RegistryValue Action="write" Type="string" Name="Version" Value="1.0" />
+              </RegistryKey>
+            </RegistryKey>
+          </Component>
         </Directory>
       </Directory>
       <?endif ?>
@@ -128,11 +220,15 @@
       <ComponentRef Id="Program" />
       <ComponentRef Id="VoiceTonu" />
       <ComponentRef Id="VoiceEva" />
+      <ComponentRef Id="VoiceLuukas" />
+      <ComponentRef Id="VoiceLee" />
 
       <?if $(sys.BUILDARCH)=x64 ?>
       <ComponentRef Id="Program64" />
       <ComponentRef Id="VoiceTonu64" />
       <ComponentRef Id="VoiceEva64" />
+      <ComponentRef Id="VoiceLuukas64" />
+      <ComponentRef Id="VoiceLee64" />
       <?endif ?>
     </Feature>
 

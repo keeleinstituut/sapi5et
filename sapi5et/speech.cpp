@@ -399,6 +399,11 @@ void CSpeechEngine::CreateLabels(CFSClassArray<CFragment> &Sentence, CFSAStringA
 	CPhrase Phrase;
 	CFragment Empty;
 
+	bool bTypeMode = (SpeakFragments.GetSize() == 1 &&
+		SpeakFragments[0]->IsSpeakAction() &&
+		SpeakFragments[0]->m_szText.GetLength() == 1
+	);
+
 	for (INTPTR ipFrag = 0; ipFrag < SpeakFragments.GetSize(); ipFrag++) {
 		// Split phrases
 		CFragment *pFragment = SpeakFragments[ipFrag];
@@ -406,7 +411,10 @@ void CSpeechEngine::CreateLabels(CFSClassArray<CFragment> &Sentence, CFSAStringA
 		const CFragment *pNextFragment = (ipFrag < SpeakFragments.GetSize() - 1 ? SpeakFragments[ipFrag + 1] : &Empty);
 
 		bool bSkip = false;
-		if (pFragment->m_eType == CFragment::TYPE_PUNCTUATION &&
+		if (bTypeMode) {
+			if (pFragment->m_eAction == SPVA_Speak) pFragment->m_eAction = SPVA_SpellOut;
+		}
+		else if (pFragment->m_eType == CFragment::TYPE_PUNCTUATION &&
 			pFragment->m_szText == L":" &&
 			pNextFragment->m_eType == CFragment::TYPE_SPACE)
 		{
@@ -532,9 +540,10 @@ void CSpeechEngine::CreateLabels(CFSClassArray<CFragment> &Sentence, CFSAStringA
 
 	Utterance.Process();
 	Utterance.CreateLabels(Labels);
+	if (bTypeMode && Labels.GetSize() > 0) Labels.RemoveItem(0);
 
 	// Guesstimate word borders
-	INTPTR ipSpread = 30; // Starting silence
+	INTPTR ipSpread = (bTypeMode ? 0 : 30); // Starting silence
 	for (INTPTR ipFrag = 0; ipFrag < Utterance.phr_vector.GetSize(); ipFrag++) {
 		const CPhrase &Phrase = Utterance.phr_vector[ipFrag];
 
@@ -608,7 +617,7 @@ void CSpeechEngine::CreateAudio(CFSClassArray<CFragment> &Sentence, double fVolu
 			pAudioBuf[ip] = sValue;
 		}
 
-		 HTS_Engine_refresh(&m_HTS);
+		HTS_Engine_refresh(&m_HTS);
 	}
 
 	// Split autio to fragments
