@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
   <Product Id="F57AD98C-C3D4-4B87-B726-E035F8CAE46C" UpgradeCode="c309b8c3-2270-42a5-a8a2-a77c0cc51dc1"
-           Name="Eesti keele kõnesüntees (SAPI5)" Language="1033" Version="1.1.0.2" Manufacturer="EKI">
+           Name="Eesti keele kõnesüntees (SAPI5)" Language="1033" Version="1.1.0.4" Manufacturer="EKI">
     <Package InstallerVersion="300" Compressed="yes"  InstallScope="perMachine"/>
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
 
